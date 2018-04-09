@@ -1,7 +1,4 @@
 import * as THREE from 'three';
-import OBJLoader from 'three-obj-loader';
-
-OBJLoader(THREE);
 
 const TEXTURE_CACHE = {};
 
@@ -53,7 +50,7 @@ class ModelLoader {
     this.parent = parent;
     this.materialProps = {};
 
-    this.loader = new THREE.OBJLoader();
+    this.loader = new THREE.GLTFLoader();
     this.loader.load(this.url, this.handleLoad, () => {}, this.handleError);
   }
 
@@ -83,8 +80,6 @@ class ModelLoader {
   updateSceneMaterial(values) {
     this.object.traverse((node) => {
       if (node.isMesh) {
-        node.material = new THREE.MeshStandardMaterial();
-
         if (values) {
           Object.keys(values).forEach((key) => {
             this.updateMaterialProp(key, values, node);
@@ -120,13 +115,12 @@ class ModelLoader {
   }
 
   handleLoad = (object) => {
-    this.object = object;
+    this.object = object.scene;
 
     this.updateSceneMaterial(this.materialProps);
 
     requestAnimationFrame(() => {
       this.parent.add(this.object);
-      console.log(this.object);
     });
   };
 

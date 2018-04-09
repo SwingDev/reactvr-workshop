@@ -1,14 +1,26 @@
 import React from 'react';
-import { View, Box, VrButton } from 'react-vr';
+import { View, VrButton, asset } from 'react-vr';
 import { connect } from 'react-redux';
 import uuid from 'uuid/v4';
 
+import { CustomModel } from '../views/CustomModel/component';
 import { updateScore } from '../actions/player';
 
 import { BOX_SCALE, BOX_SIZE } from '../config';
 
 export const WALL_WIDTH = 4;
 export const WALL_HEIGHT = 4;
+
+const BOX_MATERIAL = {
+  envMap: [
+    asset('images/skybox/px.png'),
+    asset('images/skybox/nx.png'),
+    asset('images/skybox/py.png'),
+    asset('images/skybox/ny.png'),
+    asset('images/skybox/pz.png'),
+    asset('images/skybox/nz.png'),
+  ],
+};
 
 const getBoxesProps = () => {
   const items = [];
@@ -36,15 +48,16 @@ class Wall extends React.Component {
       key={id}
       onClick={() => this.handleHit(id)}
     >
-      <Box
-        dimWidth={BOX_SIZE}
-        dimDepth={BOX_SIZE}
-        dimHeight={BOX_SIZE}
+      <CustomModel
+        source={asset('box/box.gltf')}
+        material={BOX_MATERIAL}
         style={{
           transform: [{
             translate: [x, y, 0],
+          }, {
+            scale: [0.03, 0.03, 0.03],
           }],
-          color: `#${Math.floor(Math.random() * 16777215).toString(16)}`,
+          position: 'absolute',
         }}
       />
     </VrButton>

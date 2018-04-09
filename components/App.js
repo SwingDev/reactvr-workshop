@@ -1,8 +1,8 @@
 import React from 'react';
 
 import {
-  Text,
   View,
+  AmbientLight,
   DirectionalLight,
 } from 'react-vr';
 
@@ -19,11 +19,12 @@ class App extends React.Component {
   render() {
     return (
       <View>
+        <AmbientLight intensity={0.3} />
         <DirectionalLight />
         {/* <HemiLight
           style={{
             transform: [{
-              translateY: 50,
+              translateY: 30,
             }],
             color: 0x3284ff,
           }}
@@ -49,7 +50,7 @@ class App extends React.Component {
         <Cannon
           style={{
             transform: [{
-              translate: [0, -Y_OFFSET + 0.65, -1],
+              translate: [0, -Y_OFFSET + 0.65, -3],
             }],
           }}
         />

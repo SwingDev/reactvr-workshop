@@ -4,12 +4,14 @@ import { View, asset } from 'react-vr';
 import { CustomModel } from '../views/CustomModel/component';
 
 const MATERIAL = {
-  color: '#ffffff',
-  map: asset('cannon-obj/turret_unit/DefaultMaterial_baseColor.png'),
-  normalMap: asset('cannon-obj/turret_unit/DefaultMaterial_normal.png'),
-  metalnessMap: asset('cannon-obj/turret_unit/DefaultMaterial_occlusionRoughnessMetallic.png'),
-  roughnessMap: asset('cannon-obj/turret_unit/DefaultMaterial_occlusionRoughnessMetallic.png'),
-  aoMap: asset('cannon-obj/turret_unit/DefaultMaterial_occlusionRoughnessMetallic.png'),
+  envMap: [
+    asset('images/skybox/px.png'),
+    asset('images/skybox/nx.png'),
+    asset('images/skybox/py.png'),
+    asset('images/skybox/ny.png'),
+    asset('images/skybox/pz.png'),
+    asset('images/skybox/nz.png'),
+  ],
 };
 
 const STYLE = {
@@ -23,12 +25,20 @@ class Cannon extends React.Component {
     return (
       <View style={this.props.style}>
         <CustomModel
-          source={asset('cannon-obj/turret_head.obj')}
-          style={STYLE}
+          source={asset('cannon/cannon_head_separate.gltf')}
+          style={{
+            transform: [{
+              translate: [0, 0.5, 0],
+            }, {
+              rotateY: -45,
+            }, {
+              scale: [0.001, 0.001, 0.001],
+            }],
+          }}
           material={MATERIAL}
         />
         <CustomModel
-          source={asset('cannon-obj/turret_legs.obj')}
+          source={asset('cannon/cannon_legs_separate.gltf')}
           style={STYLE}
           material={MATERIAL}
         />

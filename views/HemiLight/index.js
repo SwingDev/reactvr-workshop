@@ -9,8 +9,11 @@ class RCTHemiLight extends ReactVR.RCTBaseView {
     super();
 
     const light = new THREE.HemisphereLight();
+    const helper = new THREE.HemisphereLightHelper(light, 5);
+    light.visible = true;
     this.view = new OVRUI.UIView(guiSys);
     this.view.add(light);
+    this.view.add(helper);
 
     Object.defineProperty(
       this.props,
