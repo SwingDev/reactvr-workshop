@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, VrButton, asset } from 'react-vr';
+import { View, VrButton, Sound, asset, NativeModules } from 'react-vr';
 import { connect } from 'react-redux';
 import uuid from 'uuid/v4';
 
@@ -41,6 +41,7 @@ const getBoxesProps = () => {
 class Wall extends React.Component {
   state = {
     boxes: getBoxesProps(),
+    soundPlayState: 'pause',
   };
 
   renderBox = ({ id, x, y }) => (
@@ -64,10 +65,19 @@ class Wall extends React.Component {
   );
 
   handleHit = (id) => {
+    NativeModules.ShotBridge.emitShot();
+
     this.setState(prevState => ({
       boxes: prevState.boxes.filter(box => box.id !== id),
+      soundPlayState: 'play',
     }), () => {
       this.props.addHit();
+    });
+  };
+
+  handleSoundEnd = () => {
+    this.setState({
+      soundPlayState: 'stop',
     });
   };
 
@@ -75,6 +85,15 @@ class Wall extends React.Component {
     return (
       <View style={this.props.style}>
         {this.state.boxes.map(this.renderBox)}
+
+        <Sound
+          autoPlay={false}
+          source={{
+            mp3: asset('box-explosion.mp3'),
+          }}
+          playControl={this.state.soundPlayState}
+          onEnded={this.handleSoundEnd}
+        />
       </View>
     );
   }

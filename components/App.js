@@ -41,7 +41,7 @@ class App extends React.Component {
               translate: [
                 -WALL_WIDTH + (BOX_SIZE / 2),
                 -Y_OFFSET + (BOX_SIZE / 2),
-                -10,
+                -3,
               ],
             }],
           }}
@@ -50,7 +50,7 @@ class App extends React.Component {
         <Cannon
           style={{
             transform: [{
-              translate: [0, -Y_OFFSET + 0.65, -3],
+              translate: [0, -Y_OFFSET + 0.65, -2],
             }],
           }}
         />

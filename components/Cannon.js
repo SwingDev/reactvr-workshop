@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, asset, VrHeadModel } from 'react-vr';
+import { View, asset, VrHeadModel, Sound } from 'react-vr';
 
 import { CustomModel } from '../views/CustomModel/component';
 
@@ -38,22 +38,44 @@ class Cannon extends React.Component {
   state = {
     headRotateX: 0,
     headRotateY: 0,
+    soundPlayState: 'pause',
   };
 
   componentDidMount() {
-    this.listener = RCTDeviceEventEmitter.addListener('onReceivedHeadMatrix', this.handleReceiveMatrix);
+    this.rotateListener = RCTDeviceEventEmitter.addListener(
+      'onReceivedHeadMatrix',
+      this.handleReceiveMatrix,
+    );
+
+    this.shotListener = RCTDeviceEventEmitter.addListener(
+      'shot',
+      this.handleShot,
+    );
   }
 
   componentWillUnmount() {
-    this.listener();
+    this.rotateListener();
+    this.shotListener();
   }
 
   handleReceiveMatrix = () => {
-    const [x, y, z] = VrHeadModel.rotation();
+    const [x, y] = VrHeadModel.rotation();
 
     this.setState({
       headRotateX: getDumped(x),
       headRotateY: getDumped(y),
+    });
+  };
+
+  handleShot = () => {
+    this.setState({
+      soundPlayState: 'play',
+    });
+  };
+
+  handleSoundEnd = () => {
+    this.setState({
+      soundPlayState: 'stop',
     });
   };
 
@@ -81,6 +103,16 @@ class Cannon extends React.Component {
           source={asset('cannon/cannon_legs_separate.gltf')}
           style={STYLE}
           material={MATERIAL}
+        />
+
+        <Sound
+          autoPlay={false}
+          source={{
+            mp3: asset('cannon-shot.mp3'),
+          }}
+          playControl={this.state.soundPlayState}
+          onEnded={this.handleSoundEnd}
+          volume={1}
         />
       </View>
     );

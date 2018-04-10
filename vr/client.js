@@ -7,6 +7,8 @@ import { VRInstance } from 'react-vr-web';
 import * as SimpleRaycaster from 'simple-raycaster';
 import Stats from 'stats.js';
 
+import ShotBridge from '../modules/ShotBridge';
+
 import RCTHemiLight from '../views/HemiLight';
 import RCTCustomModel from '../views/CustomModel';
 
@@ -23,11 +25,14 @@ const enableDevTools = () => {
 };
 
 const init = (bundle, parent, options) => {
+  const shotBridge = new ShotBridge();
+
   const vr = new VRInstance(bundle, 'CannonShooter', parent, {
     // Add custom options here
     raycasters: [
       SimpleRaycaster,
     ],
+    nativeModules: [shotBridge],
     cursorVisibility: 'visible',
     customViews: [{
       name: 'HemiLight',
@@ -43,6 +48,8 @@ const init = (bundle, parent, options) => {
 
   vr.player.glRenderer.gammaInput = true;
   vr.player.glRenderer.gammaOutput = true;
+
+  shotBridge.setRNCtx(vr.rootView.context);
 
   vr.render = () => {
     // Any custom behavior you want to perform on each frame goes here
