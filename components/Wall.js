@@ -5,11 +5,14 @@ import uuid from 'uuid/v4';
 
 import { CustomModel } from '../views/CustomModel/component';
 import { updateScore } from '../actions/player';
+import { getUpdatedBoxes } from '../utils/box-helpers';
 
-import { BOX_SCALE, BOX_SIZE } from '../config';
-
-export const WALL_WIDTH = 4;
-export const WALL_HEIGHT = 4;
+import {
+  BOX_SCALE,
+  BOX_SIZE,
+  WALL_WIDTH,
+  WALL_HEIGHT,
+} from '../config';
 
 const BOX_MATERIAL = {
   envMap: [
@@ -31,12 +34,17 @@ const getBoxesProps = () => {
         id: uuid(),
         x: i * BOX_SIZE * BOX_SCALE,
         y: j * BOX_SIZE * BOX_SCALE,
+        points: 1,
       });
     }
   }
 
   return items;
 };
+
+const getPoints = boxes => (
+  boxes.reduce((sum, box) => (sum + box.points), 0)
+);
 
 class Wall extends React.Component {
   state = {
@@ -65,13 +73,21 @@ class Wall extends React.Component {
   );
 
   handleHit = (id) => {
+    const { boxes } = this.state;
+    const { weapon } = this.props.player;
+
     NativeModules.ShotBridge.emitShot();
 
-    this.setState(prevState => ({
-      boxes: prevState.boxes.filter(box => box.id !== id),
+    const {
+      updatedBoxes,
+      boxesToRemove,
+    } = getUpdatedBoxes(boxes, id, weapon);
+
+    this.setState({
+      boxes: updatedBoxes,
       soundPlayState: 'play',
-    }), () => {
-      this.props.addHit();
+    }, () => {
+      this.props.addHit(getPoints(boxesToRemove));
     });
   };
 
@@ -99,8 +115,12 @@ class Wall extends React.Component {
   }
 }
 
-const mapDispatchToProps = dispatch => ({
-  addHit: () => dispatch(updateScore()),
+const mapStateToProps = state => ({
+  player: state.player,
 });
 
-export default connect(null, mapDispatchToProps)(Wall);
+const mapDispatchToProps = dispatch => ({
+  addHit: (points = 1) => dispatch(updateScore(points)),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Wall);

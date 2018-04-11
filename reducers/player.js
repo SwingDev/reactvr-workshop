@@ -1,8 +1,10 @@
+import { weapons } from '../config';
 import { ADD_POINTS } from '../actions/player';
 
 const INITIAL_STATE = {
   score: 0,
   hits: 0,
+  weapon: weapons.ROCKET,
 };
 
 const reducer = (state = INITIAL_STATE, action) => {

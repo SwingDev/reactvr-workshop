@@ -6,14 +6,14 @@ import {
   DirectionalLight,
 } from 'react-vr';
 
-import { Y_OFFSET, BOX_SIZE } from '../config';
+import { Y_OFFSET, BOX_SIZE, WALL_WIDTH } from '../config';
 import { HemiLight } from '../views/HemiLight/component';
 
 import Sky from './Sky';
 import Ground from './Ground';
 import Cannon from './Cannon';
 import Score from './Score';
-import Wall, { WALL_WIDTH } from './Wall';
+import Wall from './Wall';
 
 class App extends React.Component {
   render() {
