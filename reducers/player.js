@@ -13,7 +13,7 @@ const reducer = (state = INITIAL_STATE, action) => {
       return {
         ...state,
         score: state.score + action.points,
-        hits: state.hits + 1,
+        hits: state.hits + action.hits,
       };
 
     default:

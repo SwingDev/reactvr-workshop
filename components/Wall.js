@@ -5,7 +5,7 @@ import uuid from 'uuid/v4';
 
 import { CustomModel } from '../views/CustomModel/component';
 import { updateScore } from '../actions/player';
-import { getUpdatedBoxes } from '../utils/box-helpers';
+import { getUpdatedBoxes, getRandomBoxType } from '../utils/box-helpers';
 
 import {
   BOX_SCALE,
@@ -30,11 +30,14 @@ const getBoxesProps = () => {
 
   for (let i = 0; i < WALL_WIDTH; i += 1) {
     for (let j = 0; j < WALL_HEIGHT; j += 1) {
+      const boxType = getRandomBoxType();
+
       items.push({
         id: uuid(),
         x: i * BOX_SIZE * BOX_SCALE,
         y: j * BOX_SIZE * BOX_SCALE,
-        points: 1,
+        points: boxType.points,
+        color: boxType.color,
       });
     }
   }
@@ -52,14 +55,22 @@ class Wall extends React.Component {
     soundPlayState: 'pause',
   };
 
-  renderBox = ({ id, x, y }) => (
+  renderBox = ({
+    id,
+    x,
+    y,
+    color,
+  }) => (
     <VrButton
       key={id}
       onClick={() => this.handleHit(id)}
     >
       <CustomModel
         source={asset('box/box.gltf')}
-        material={BOX_MATERIAL}
+        material={{
+          ...BOX_MATERIAL,
+          color,
+        }}
         style={{
           transform: [{
             translate: [x, y, 0],
@@ -87,7 +98,10 @@ class Wall extends React.Component {
       boxes: updatedBoxes,
       soundPlayState: 'play',
     }, () => {
-      this.props.addHit(getPoints(boxesToRemove));
+      this.props.addHit(
+        getPoints(boxesToRemove),
+        boxesToRemove.length,
+      );
     });
   };
 

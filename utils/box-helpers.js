@@ -2,6 +2,7 @@ import {
   WALL_WIDTH,
   WALL_HEIGHT,
   weaponConfig,
+  boxTypes,
 } from '../config';
 
 const getColumn = index => (
@@ -48,3 +49,7 @@ export const getUpdatedBoxes = (boxes, removedId, weapon) => {
 
   return { boxesToRemove, updatedBoxes };
 };
+
+export const getRandomBoxType = () => (
+  boxTypes[Math.floor(Math.random() * boxTypes.length)]
+);
