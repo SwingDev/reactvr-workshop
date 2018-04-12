@@ -3,16 +3,17 @@ import { View, VrButton, Sound, asset, NativeModules } from 'react-vr';
 import { connect } from 'react-redux';
 import uuid from 'uuid/v4';
 
-import { CustomModel } from '../views/CustomModel/component';
-import { updateScore } from '../actions/player';
-import { getUpdatedBoxes, getRandomBoxType } from '../utils/box-helpers';
-
 import {
   BOX_SCALE,
   BOX_SIZE,
   WALL_WIDTH,
   WALL_HEIGHT,
 } from '../config';
+
+import { CustomModel } from '../views/CustomModel/component';
+import { updateScore, setFinishedStatus } from '../actions/player';
+import { getUpdatedBoxes, getRandomBoxType } from '../utils/box-helpers';
+import Summary from './Summary';
 
 const BOX_MATERIAL = {
   envMap: [
@@ -23,6 +24,12 @@ const BOX_MATERIAL = {
     asset('images/skybox/pz.png'),
     asset('images/skybox/nz.png'),
   ],
+};
+
+const SUMMARY_STYLE = {
+  transform: [{
+    translate: [3, 3, -5],
+  }],
 };
 
 const getBoxesProps = () => {
@@ -83,6 +90,15 @@ class Wall extends React.Component {
     </VrButton>
   );
 
+  finishGame() {
+    this.props.updateFinishedStatus(true);
+
+    this.setState({
+      boxes: getBoxesProps(),
+      soundPlayState: 'pause',
+    });
+  }
+
   handleHit = (id) => {
     const { boxes } = this.state;
     const { weapon } = this.props.player;
@@ -97,12 +113,20 @@ class Wall extends React.Component {
     this.setState({
       boxes: updatedBoxes,
       soundPlayState: 'play',
-    }, () => {
-      this.props.addHit(
-        getPoints(boxesToRemove),
-        boxesToRemove.length,
-      );
-    });
+    }, () => this.afterHitUpdate(boxesToRemove));
+  };
+
+  afterHitUpdate = (boxesToRemove) => {
+    const { boxes } = this.state;
+
+    this.props.addHit(
+      getPoints(boxesToRemove),
+      boxesToRemove.length,
+    );
+
+    if (boxes.length === 0) {
+      this.finishGame();
+    }
   };
 
   handleSoundEnd = () => {
@@ -112,9 +136,16 @@ class Wall extends React.Component {
   };
 
   render() {
+    const { hasFinished } = this.props.player;
+    const { boxes } = this.state;
+
     return (
       <View style={this.props.style}>
-        {this.state.boxes.map(this.renderBox)}
+        {(!hasFinished) ? (
+          boxes.map(this.renderBox)
+        ) : (
+          <Summary style={SUMMARY_STYLE} />
+        )}
 
         <Sound
           autoPlay={false}
@@ -135,6 +166,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   addHit: (points = 1) => dispatch(updateScore(points)),
+  updateFinishedStatus: hasFinished => dispatch(setFinishedStatus(hasFinished)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Wall);

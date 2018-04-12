@@ -40,8 +40,8 @@ class App extends React.Component {
             transform: [{
               translate: [
                 -WALL_WIDTH + (BOX_SIZE / 2),
-                -Y_OFFSET + (BOX_SIZE / 2),
-                -3,
+                -Y_OFFSET,
+                -5,
               ],
             }],
           }}

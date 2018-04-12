@@ -11,7 +11,7 @@ class Score extends React.Component {
       <Text
         style={{
           ...this.props.style,
-          backgroundColor: '#777879',
+          backgroundColor: 'rgba(0, 0, 0, 0.6)',
           fontSize: 0.8,
           fontWeight: '400',
           layoutOrigin: [0.5, 0.5],
