@@ -8,6 +8,8 @@ import {
   BOX_SIZE,
   WALL_WIDTH,
   WALL_HEIGHT,
+  SPECIAL_WEAPON_DELAY,
+  weapons,
 } from '../config';
 
 import { CustomModel } from '../views/CustomModel/component';
@@ -44,7 +46,7 @@ const getBoxesProps = () => {
         x: i * BOX_SIZE * BOX_SCALE,
         y: j * BOX_SIZE * BOX_SCALE,
         points: boxType.points,
-        color: boxType.color,
+        file: boxType.file,
       });
     }
   }
@@ -66,18 +68,17 @@ class Wall extends React.Component {
     id,
     x,
     y,
-    color,
+    file,
   }) => (
     <VrButton
       key={id}
       onClick={() => this.handleHit(id)}
+      onLongClick={() => this.handleHit(id, weapons.ROCKET)}
+      longClickDelayMS={SPECIAL_WEAPON_DELAY}
     >
       <CustomModel
-        source={asset('box/box.gltf')}
-        material={{
-          ...BOX_MATERIAL,
-          color,
-        }}
+        source={asset(file || 'box/box.gltf')}
+        material={BOX_MATERIAL}
         style={{
           transform: [{
             translate: [x, y, 0],
@@ -99,9 +100,8 @@ class Wall extends React.Component {
     });
   }
 
-  handleHit = (id) => {
+  handleHit = (id, weapon = weapons.CANNONBALL) => {
     const { boxes } = this.state;
-    const { weapon } = this.props.player;
 
     NativeModules.ShotBridge.emitShot();
 

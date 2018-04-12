@@ -10,7 +10,8 @@ export const boxTypes = [{
   points: 1,
 }, {
   points: 10,
-  color: 0x00ff00,
+  file: 'box/box-special.gltf',
+  mapFile: 'box/DefaultMaterial_baseColor-2.png',
 }];
 
 export const weapons = {
@@ -22,3 +23,5 @@ export const weaponConfig = {
   [weapons.CANNONBALL]: 1,
   [weapons.ROCKET]: 3,
 };
+
+export const SPECIAL_WEAPON_DELAY = 500;

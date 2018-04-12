@@ -1,5 +1,3 @@
-import { weapons } from '../config';
-
 import {
   PLAYER_ADD_POINTS,
   PLAYER_FINISH_STATUS_SET,
@@ -8,9 +6,8 @@ import {
 const INITIAL_STATE = {
   score: 0,
   hits: 0,
-  time: 0,
+  time: Date.now(),
   hasFinished: false,
-  weapon: weapons.ROCKET,
 };
 
 const reducer = (state = INITIAL_STATE, action) => {
@@ -24,12 +21,16 @@ const reducer = (state = INITIAL_STATE, action) => {
 
     case PLAYER_FINISH_STATUS_SET:
       if (action.hasFinished === false) {
-        return INITIAL_STATE;
+        return {
+          ...INITIAL_STATE,
+          time: Date.now(),
+        };
       }
 
       return {
         ...state,
         hasFinished: action.hasFinished,
+        time: Date.now() - state.time,
       };
 
     default:

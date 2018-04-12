@@ -3,7 +3,7 @@ import { Text } from 'react-vr';
 
 import { connect } from 'react-redux';
 
-class Score extends React.Component {
+class HUD extends React.Component {
   render() {
     const { score } = this.props.player;
 
@@ -12,11 +12,11 @@ class Score extends React.Component {
         style={{
           ...this.props.style,
           backgroundColor: 'rgba(0, 0, 0, 0.6)',
-          fontSize: 0.8,
+          fontSize: 0.25,
           fontWeight: '400',
           layoutOrigin: [0.5, 0.5],
-          paddingLeft: 0.2,
-          paddingRight: 0.2,
+          paddingLeft: 0.05,
+          paddingRight: 0.05,
           textAlign: 'center',
           textAlignVertical: 'center',
           position: 'absolute',
@@ -32,4 +32,4 @@ const mapStateToProps = state => ({
   player: state.player,
 });
 
-export default connect(mapStateToProps)(Score);
+export default connect(mapStateToProps)(HUD);

@@ -50,6 +50,10 @@ class ModelLoader {
     this.parent = parent;
     this.materialProps = {};
 
+    this.load();
+  }
+
+  load() {
     this.loader = new THREE.GLTFLoader();
     this.loader.load(this.url, this.handleLoad, () => {}, this.handleError);
   }
@@ -92,6 +96,8 @@ class ModelLoader {
   updateMaterialProp = (key, values, node) => {
     const value = values[key];
 
+    if (!value) return;
+
     switch (key) {
       case 'envMap':
         node.material[key] = getCubeTexture(key, value);
@@ -124,8 +130,8 @@ class ModelLoader {
     });
   };
 
-  handleError = () => {
-    console.error('failed to load OBJ', this.url);
+  handleError = (error) => {
+    console.error('failed to load GLTF', this.url, error);
   };
 }
 

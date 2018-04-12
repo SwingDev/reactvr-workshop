@@ -2,6 +2,7 @@ import React from 'react';
 import { View, asset, VrHeadModel, Sound } from 'react-vr';
 
 import { CustomModel } from '../views/CustomModel/component';
+import HUD from './HUD';
 
 const RCTDeviceEventEmitter = require('RCTDeviceEventEmitter');
 
@@ -18,9 +19,15 @@ const MATERIAL = {
 
 const MAX_ROTATION_DEGREE = 20;
 
-const STYLE = {
+const CANNON_STYLE = {
   transform: [{
     scale: [0.001, 0.001, 0.001],
+  }],
+};
+
+const HUD_STYLE = {
+  transform: [{
+    translate: [-0.5, 0.75, -0.5],
   }],
 };
 
@@ -84,8 +91,7 @@ class Cannon extends React.Component {
 
     return (
       <View style={this.props.style}>
-        <CustomModel
-          source={asset('cannon/cannon_head_separate.gltf')}
+        <View
           style={{
             transform: [{
               translate: [0, 0.5, 0],
@@ -93,15 +99,21 @@ class Cannon extends React.Component {
               rotateX: headRotateX,
             }, {
               rotateY: headRotateY,
-            }, {
-              scale: [0.001, 0.001, 0.001],
             }],
           }}
-          material={MATERIAL}
-        />
+        >
+          <HUD style={HUD_STYLE} />
+
+          <CustomModel
+            source={asset('cannon/cannon_head_separate.gltf')}
+            style={CANNON_STYLE}
+            material={MATERIAL}
+          />
+        </View>
+
         <CustomModel
           source={asset('cannon/cannon_legs_separate.gltf')}
-          style={STYLE}
+          style={CANNON_STYLE}
           material={MATERIAL}
         />
 

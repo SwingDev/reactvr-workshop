@@ -31,9 +31,13 @@ const BUTTON_STYLE = {
   textAlignVertical: 'center',
 };
 
+const getFormattedTime = time => (
+  `${(time / 1000).toFixed(2)}s`
+);
+
 class Summary extends React.Component {
   render() {
-    const { score, hits } = this.props.player;
+    const { score, hits, time } = this.props.player;
 
     return (
       <View style={{ ...this.props.style, ...ROOT_STYLE }}>
@@ -46,7 +50,7 @@ class Summary extends React.Component {
         </Text>
 
         <Text style={TEXT_STYLE}>
-          Your time: 0
+          Your time: {getFormattedTime(time)}
         </Text>
 
         <VrButton onClick={() => this.props.updateFinishedStatus(false)}>
