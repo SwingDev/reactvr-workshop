@@ -11,6 +11,7 @@ import ShotBridge from '../modules/ShotBridge';
 
 import RCTHemiLight from '../views/HemiLight';
 import RCTCustomModel from '../views/CustomModel';
+import RCTParticlePool from '../views/ParticlePool';
 
 const enableDevTools = () => {
   const stats = new Stats();
@@ -28,7 +29,6 @@ const init = (bundle, parent, options) => {
   const shotBridge = new ShotBridge();
 
   const vr = new VRInstance(bundle, 'CannonShooter', parent, {
-    // Add custom options here
     raycasters: [
       SimpleRaycaster,
     ],
@@ -40,6 +40,9 @@ const init = (bundle, parent, options) => {
     }, {
       name: 'CustomModel',
       view: RCTCustomModel,
+    }, {
+      name: 'ParticlePool',
+      view: RCTParticlePool,
     }],
     ...options,
   });

@@ -24,4 +24,4 @@ export const weaponConfig = {
   [weapons.ROCKET]: 3,
 };
 
-export const SPECIAL_WEAPON_DELAY = 500;
+export const SPECIAL_WEAPON_DELAY = 300;

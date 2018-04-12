@@ -18,7 +18,7 @@ class App extends React.Component {
   render() {
     return (
       <View>
-        <AmbientLight intensity={0.4} />
+        {/* <AmbientLight intensity={0.4} /> */}
         <DirectionalLight />
         {/* <HemiLight
           style={{

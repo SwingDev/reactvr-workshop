@@ -1,4 +1,5 @@
 import React from 'react';
+import * as THREE from 'three';
 import { View, VrButton, Sound, asset, NativeModules } from 'react-vr';
 import { connect } from 'react-redux';
 import uuid from 'uuid/v4';
@@ -13,6 +14,7 @@ import {
 } from '../config';
 
 import { CustomModel } from '../views/CustomModel/component';
+import { ParticlePool } from '../views/ParticlePool/component';
 import { updateScore, setFinishedStatus } from '../actions/player';
 import { getUpdatedBoxes, getRandomBoxType } from '../utils/box-helpers';
 import Summary from './Summary';
@@ -62,34 +64,41 @@ class Wall extends React.Component {
   state = {
     boxes: getBoxesProps(),
     soundPlayState: 'pause',
+    explosionPosition: new THREE.Vector3(0, 0, -5),
+    showExplosion: false,
   };
 
-  renderBox = ({
-    id,
-    x,
-    y,
-    file,
-  }) => (
-    <VrButton
-      key={id}
-      onClick={() => this.handleHit(id)}
-      onLongClick={() => this.handleHit(id, weapons.ROCKET)}
-      longClickDelayMS={SPECIAL_WEAPON_DELAY}
-    >
-      <CustomModel
-        source={asset(file || 'box/box.gltf')}
-        material={BOX_MATERIAL}
-        style={{
-          transform: [{
-            translate: [x, y, 0],
-          }, {
-            scale: [0.03, 0.03, 0.03],
-          }],
-          position: 'absolute',
-        }}
-      />
-    </VrButton>
-  );
+  renderBox = (box) => {
+    const {
+      id,
+      x,
+      y,
+      file,
+    } = box;
+
+    return (
+      <VrButton
+        key={id}
+        onClick={() => this.handleHit(box)}
+        onLongClick={() => this.handleHit(box, weapons.ROCKET)}
+        longClickDelayMS={SPECIAL_WEAPON_DELAY}
+      >
+        <CustomModel
+          source={asset(file || 'box/box.gltf')}
+          material={BOX_MATERIAL}
+          style={{
+            transform: [{
+              translate: [x, y, 0],
+            }, {
+              scale: [0.03, 0.03, 0.03],
+            }],
+            position: 'absolute',
+            layoutOrigin: [0.5, 0.5],
+          }}
+        />
+      </VrButton>
+    );
+  }
 
   finishGame() {
     this.props.updateFinishedStatus(true);
@@ -100,8 +109,9 @@ class Wall extends React.Component {
     });
   }
 
-  handleHit = (id, weapon = weapons.CANNONBALL) => {
-    const { boxes } = this.state;
+  handleHit = (box, weapon = weapons.CANNONBALL) => {
+    const { id, x, y } = box;
+    const { boxes, explosionPosition } = this.state;
 
     NativeModules.ShotBridge.emitShot();
 
@@ -113,6 +123,8 @@ class Wall extends React.Component {
     this.setState({
       boxes: updatedBoxes,
       soundPlayState: 'play',
+      explosionPosition: explosionPosition.clone().set(x, y, -5),
+      showExplosion: true,
     }, () => this.afterHitUpdate(boxesToRemove));
   };
 
@@ -123,6 +135,10 @@ class Wall extends React.Component {
       getPoints(boxesToRemove),
       boxesToRemove.length,
     );
+
+    this.setState({
+      showExplosion: false,
+    });
 
     if (boxes.length === 0) {
       this.finishGame();
@@ -137,7 +153,7 @@ class Wall extends React.Component {
 
   render() {
     const { hasFinished } = this.props.player;
-    const { boxes } = this.state;
+    const { boxes, explosionPosition, showExplosion } = this.state;
 
     return (
       <View style={this.props.style}>
@@ -154,6 +170,21 @@ class Wall extends React.Component {
           }}
           playControl={this.state.soundPlayState}
           onEnded={this.handleSoundEnd}
+        />
+
+        <ParticlePool
+          type='explosion'
+          particlePosition={explosionPosition}
+          show={showExplosion}
+          style={{
+            transform: [{
+              translate: [
+                explosionPosition.x - 0.25,
+                explosionPosition.y + 0.5,
+                explosionPosition.z - 1,
+              ],
+            }],
+          }}
         />
       </View>
     );
