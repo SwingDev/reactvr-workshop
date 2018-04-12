@@ -27,14 +27,6 @@ class RCTParticlePool extends ReactVR.RCTBaseView {
 
     Object.defineProperty(
       this.props,
-      'listenFor',
-      ({
-        set: this.setListener,
-      }),
-    );
-
-    Object.defineProperty(
-      this.props,
       'particlePosition',
       ({
         set: this.setParticlePosition,
@@ -60,6 +52,7 @@ class RCTParticlePool extends ReactVR.RCTBaseView {
       this.view.raycast = () => {};
 
       this.group.mesh.frustumCulled = false;
+
       this.group.addPool(poolSize, emitters, false);
     }
   };

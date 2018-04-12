@@ -1,7 +1,9 @@
 import React from 'react';
+import * as THREE from 'three';
 import { View, asset, VrHeadModel, Sound } from 'react-vr';
 
 import { CustomModel } from '../views/CustomModel/component';
+import { ParticlePool } from '../views/ParticlePool/component';
 import HUD from './HUD';
 
 const RCTDeviceEventEmitter = require('RCTDeviceEventEmitter');
@@ -31,6 +33,8 @@ const HUD_STYLE = {
   }],
 };
 
+const PARTICLE_POSITION = new THREE.Vector3();
+
 /* eslint-disable no-nested-ternary */
 const getDumped = value => (
   (value > MAX_ROTATION_DEGREE)
@@ -46,6 +50,7 @@ class Cannon extends React.Component {
     headRotateX: 0,
     headRotateY: 0,
     soundPlayState: 'pause',
+    showSmoke: false,
   };
 
   componentDidMount() {
@@ -77,6 +82,11 @@ class Cannon extends React.Component {
   handleShot = () => {
     this.setState({
       soundPlayState: 'play',
+      showSmoke: true,
+    }, () => {
+      this.setState({
+        showSmoke: false,
+      });
     });
   };
 
@@ -87,7 +97,7 @@ class Cannon extends React.Component {
   };
 
   render() {
-    const { headRotateX, headRotateY } = this.state;
+    const { headRotateX, headRotateY, showSmoke } = this.state;
 
     return (
       <View style={this.props.style}>
@@ -108,6 +118,17 @@ class Cannon extends React.Component {
             source={asset('cannon/cannon_head_separate.gltf')}
             style={CANNON_STYLE}
             material={MATERIAL}
+          />
+
+          <ParticlePool
+            type='smoke'
+            particlePosition={PARTICLE_POSITION}
+            show={showSmoke}
+            style={{
+              transform: [{
+                translate: [0, 0.5, -1],
+              }],
+            }}
           />
         </View>
 

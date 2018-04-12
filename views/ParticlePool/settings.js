@@ -44,30 +44,32 @@ export default {
   },
   smoke: {
     poolSize: 2,
-    texture: {
-      value: textureLoader.load(smokeImage),
+    settings: {
+      texture: {
+        value: textureLoader.load(smokeImage),
+      },
+      depthTest: true,
+      depthWrite: false,
+      blending: THREE.NormalBlending,
+      maxParticleCount: 1000,
     },
-    depthTest: true,
-    depthWrite: false,
-    blending: THREE.NormalBlending,
-    maxParticleCount: 1000,
+    emitters: [
+      {
+        particleCount: 600,
+        type: SPE.distributions.SPHERE,
+        position: {
+          radius: 0.1,
+        },
+        maxAge: {
+          value: 0.5,
+        },
+        activeMultiplier: 20,
+        velocity: {
+          value: new THREE.Vector3(1.2),
+        },
+        size: { value: 1.5 },
+        opacity: { value: [0.5, 0] },
+      },
+    ],
   },
-  emitters: [
-    {
-      particleCount: 600,
-      type: SPE.distributions.SPHERE,
-      position: {
-        radius: 0.1,
-      },
-      maxAge: {
-        value: 0.5,
-      },
-      activeMultiplier: 20,
-      velocity: {
-        value: new THREE.Vector3(1.2),
-      },
-      size: { value: 1.5 },
-      opacity: { value: [0.5, 0] },
-    },
-  ],
 };
