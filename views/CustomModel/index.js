@@ -3,7 +3,7 @@ import * as OVRUI from 'ovrui';
 
 import merge from 'react-vr-web/js/Utils/merge';
 
-import { createModelInstance } from './loader';
+import createModelInstance from './loader';
 
 class RCTCustomModel extends ReactVR.RCTBaseView {
   constructor(guiSys) {

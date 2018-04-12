@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 
 const TEXTURE_CACHE = {};
+const LOAD_LIST = {};
 
 const getUrl = value => (
   (value.uri) ? value.uri : value
@@ -54,8 +55,23 @@ class ModelLoader {
   }
 
   load() {
+    if (LOAD_LIST[this.url]) {
+      LOAD_LIST[this.url].push(this.handleLoad);
+      return;
+    }
+
+    LOAD_LIST[this.url] = [this.handleLoad];
+
     this.loader = new THREE.GLTFLoader();
-    this.loader.load(this.url, this.handleLoad, () => {}, this.handleError);
+    this.loader.load(
+      this.url,
+      (object) => {
+        LOAD_LIST[this.url].forEach(callback => callback(object));
+        delete LOAD_LIST[this.url];
+      },
+      () => {},
+      this.handleError,
+    );
   }
 
   update(newUrl) {
@@ -121,7 +137,7 @@ class ModelLoader {
   }
 
   handleLoad = (object) => {
-    this.object = object.scene;
+    this.object = object.scene.clone();
 
     this.updateSceneMaterial(this.materialProps);
 
@@ -132,10 +148,10 @@ class ModelLoader {
 
   handleError = (error) => {
     console.error('failed to load GLTF', this.url, error);
+    delete LOAD_LIST[this.url];
   };
 }
 
-export const createModelInstance = (url, parent) => (
-  new ModelLoader(url, parent)
-);
-
+export default function (url, parent) {
+  return new ModelLoader(url, parent);
+}
