@@ -17,7 +17,6 @@ import { CustomModel } from '../views/CustomModel/component';
 import { ParticlePool } from '../views/ParticlePool/component';
 import { updateScore, setFinishedStatus } from '../actions/player';
 import { getUpdatedBoxes, getRandomBoxType } from '../utils/box-helpers';
-import Summary from './Summary';
 
 const BOX_MATERIAL = {
   envMap: [
@@ -80,8 +79,6 @@ class Wall extends React.Component {
       <VrButton
         key={id}
         onClick={() => this.handleHit(box)}
-        onLongClick={() => this.handleHit(box, weapons.ROCKET)}
-        longClickDelayMS={SPECIAL_WEAPON_DELAY}
       >
         <CustomModel
           source={asset(file || 'box/box.gltf')}
@@ -98,16 +95,7 @@ class Wall extends React.Component {
     );
   }
 
-  finishGame() {
-    this.props.updateFinishedStatus(true);
-
-    this.setState({
-      boxes: getBoxesProps(),
-      soundPlayState: 'pause',
-    });
-  }
-
-  handleHit = (box, weapon = weapons.CANNONBALL) => {
+  handleHit = (box) => {
     const { id, x, y } = box;
     const { boxes, explosionPosition } = this.state;
 
@@ -116,7 +104,7 @@ class Wall extends React.Component {
     const {
       updatedBoxes,
       boxesToRemove,
-    } = getUpdatedBoxes(boxes, id, weapon);
+    } = getUpdatedBoxes(boxes, id);
 
     this.setState({
       boxes: updatedBoxes,
@@ -137,10 +125,6 @@ class Wall extends React.Component {
     this.setState({
       showExplosion: false,
     });
-
-    if (boxes.length === 0) {
-      this.finishGame();
-    }
   };
 
   handleSoundEnd = () => {
@@ -161,11 +145,7 @@ class Wall extends React.Component {
 
     return (
       <View style={this.props.style}>
-        {(!hasFinished) ? (
-          boxes.map(this.renderBox)
-        ) : (
-          <Summary style={SUMMARY_STYLE} />
-        )}
+        {boxes.map(this.renderBox)}
 
         <Sound
           autoPlay={false}

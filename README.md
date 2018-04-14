@@ -1,6 +1,15 @@
 # Cannon Shooter
 Simple Cannon Shooter game built in [React VR][reactvr]
 
+## Stage
+Adding score and weapon types
+
+- Make Summary component
+- Create game's HUD component
+- Add Summary to Wall component and show it on game's end
+- Attach HUD to Cannon’s head
+- Handle weapon types in Wall component
+
 ## Requirements
 - [Node.js][node.js]
 - [Yarn][yarn]

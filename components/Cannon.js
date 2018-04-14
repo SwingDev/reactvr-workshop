@@ -3,7 +3,6 @@ import { View, asset, VrHeadModel, Sound } from 'react-vr';
 
 import { CustomModel } from '../views/CustomModel/component';
 import { ParticlePool } from '../views/ParticlePool/component';
-import HUD from './HUD';
 
 const RCTDeviceEventEmitter = require('RCTDeviceEventEmitter');
 
@@ -114,8 +113,6 @@ class Cannon extends React.Component {
             }],
           }}
         >
-          <HUD style={HUD_STYLE} />
-
           <CustomModel
             source={asset('cannon/cannon_head_separate.gltf')}
             style={CANNON_STYLE}

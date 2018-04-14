@@ -40,25 +40,6 @@ class Summary extends React.Component {
     const { score, hits, time } = this.props.player;
 
     return (
-      <View style={{ ...this.props.style, ...ROOT_STYLE }}>
-        <Text style={TEXT_STYLE}>
-          Your points: {score}
-        </Text>
-
-        <Text style={TEXT_STYLE}>
-          Your hits: {hits}
-        </Text>
-
-        <Text style={TEXT_STYLE}>
-          Your time: {getFormattedTime(time)}
-        </Text>
-
-        <VrButton onClick={() => this.props.updateFinishedStatus(false)}>
-          <Text style={BUTTON_STYLE}>
-            Restart game
-          </Text>
-        </VrButton>
-      </View>
     );
   }
 }
