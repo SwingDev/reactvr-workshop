@@ -1,6 +1,15 @@
 # Cannon Shooter
 Simple Cannon Shooter game built in [React VR][reactvr]
 
+## Stage
+Loading models and adding interaction
+
+- Create Cannon component and load model
+- Create Wall component and load box models
+- Add Cannon and Wall to App.js
+- Make box disappear on click
+- Make Cannon's head rotate according to camera
+
 ## Requirements
 - [Node.js][node.js]
 - [Yarn][yarn]

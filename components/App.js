@@ -10,8 +10,6 @@ import { Y_OFFSET, BOX_SIZE, WALL_WIDTH } from '../config';
 
 import Sky from './Sky';
 import Ground from './Ground';
-import Cannon from './Cannon';
-import Wall from './Wall';
 
 const WALL_STYLE = {
   transform: [{
@@ -38,9 +36,6 @@ class App extends React.Component {
 
         <Sky />
         <Ground />
-
-        <Wall style={WALL_STYLE} />
-        <Cannon style={CANNON_STYLE} />
       </View>
     );
   }
