@@ -41,19 +41,6 @@ class Cannon extends React.Component {
   render() {
     return (
       <View style={this.props.style}>
-        <View>
-          <CustomModel
-            source={asset('cannon/cannon_head_separate.gltf')}
-            style={CANNON_STYLE}
-            material={MATERIAL}
-          />
-        </View>
-
-        <CustomModel
-          source={asset('cannon/cannon_legs_separate.gltf')}
-          style={CANNON_STYLE}
-          material={MATERIAL}
-        />
       </View>
     );
   }
