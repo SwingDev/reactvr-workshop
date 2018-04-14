@@ -2,8 +2,6 @@ import React from 'react';
 import { View, asset, VrHeadModel, Sound } from 'react-vr';
 
 import { CustomModel } from '../views/CustomModel/component';
-import { ParticlePool } from '../views/ParticlePool/component';
-import HUD from './HUD';
 
 const RCTDeviceEventEmitter = require('RCTDeviceEventEmitter');
 
@@ -26,12 +24,6 @@ const CANNON_STYLE = {
   }],
 };
 
-const HUD_STYLE = {
-  transform: [{
-    translate: [-0.5, 0.75, -0.5],
-  }],
-};
-
 /* eslint-disable no-nested-ternary */
 const getClamped = value => (
   (value > MAX_ROTATION_DEGREE)
@@ -46,8 +38,6 @@ class Cannon extends React.Component {
   state = {
     headRotateX: 0,
     headRotateY: 0,
-    soundPlayState: 'pause',
-    showSmoke: false,
   };
 
   componentDidMount() {
@@ -55,16 +45,10 @@ class Cannon extends React.Component {
       'onReceivedHeadMatrix',
       this.handleReceiveMatrix,
     );
-
-    this.shotListener = RCTDeviceEventEmitter.addListener(
-      'shot',
-      this.handleShot,
-    );
   }
 
   componentWillUnmount() {
     this.rotateListener();
-    this.shotListener();
   }
 
   handleReceiveMatrix = () => {
@@ -76,29 +60,10 @@ class Cannon extends React.Component {
     });
   };
 
-  handleShot = () => {
-    this.setState({
-      soundPlayState: 'play',
-      showSmoke: true,
-    }, () => {
-      this.setState({
-        showSmoke: false,
-      });
-    });
-  };
-
-  handleSoundEnd = () => {
-    this.setState({
-      soundPlayState: 'stop',
-    });
-  };
-
   render() {
     const {
       headRotateX,
       headRotateY,
-      showSmoke,
-      soundPlayState,
     } = this.state;
 
     return (
@@ -114,22 +79,10 @@ class Cannon extends React.Component {
             }],
           }}
         >
-          <HUD style={HUD_STYLE} />
-
           <CustomModel
             source={asset('cannon/cannon_head_separate.gltf')}
             style={CANNON_STYLE}
             material={MATERIAL}
-          />
-
-          <ParticlePool
-            type='smoke'
-            show={showSmoke}
-            style={{
-              transform: [{
-                translate: [0, 0.5, -1],
-              }],
-            }}
           />
         </View>
 
@@ -137,15 +90,6 @@ class Cannon extends React.Component {
           source={asset('cannon/cannon_legs_separate.gltf')}
           style={CANNON_STYLE}
           material={MATERIAL}
-        />
-
-        <Sound
-          autoPlay={false}
-          source={{
-            mp3: asset('cannon-shot.mp3'),
-          }}
-          playControl={soundPlayState}
-          onEnded={this.handleSoundEnd}
         />
       </View>
     );

@@ -1,6 +1,17 @@
 # Cannon Shooter
 Simple Cannon Shooter game built in [React VR][reactvr]
 
+## Stage
+Adding particles and sounds
+
+- Update Wall's component state
+- Add particles to Wall component
+- Update Cannon's state on shot
+- Add particles to Cannon component
+- Add sound to Wall’s component
+- Play sound when box is hit
+- Add sound to Cannon’s component
+
 ## Requirements
 - [Node.js][node.js]
 - [Yarn][yarn]

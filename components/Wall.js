@@ -9,15 +9,12 @@ import {
   BOX_SIZE,
   WALL_WIDTH,
   WALL_HEIGHT,
-  SPECIAL_WEAPON_DELAY,
   weapons,
 } from '../config';
 
 import { CustomModel } from '../views/CustomModel/component';
-import { ParticlePool } from '../views/ParticlePool/component';
 import { updateScore, setFinishedStatus } from '../actions/player';
 import { getUpdatedBoxes, getRandomBoxType } from '../utils/box-helpers';
-import Summary from './Summary';
 
 const BOX_MATERIAL = {
   envMap: [
@@ -28,12 +25,6 @@ const BOX_MATERIAL = {
     asset('images/skybox/pz.png'),
     asset('images/skybox/nz.png'),
   ],
-};
-
-const SUMMARY_STYLE = {
-  transform: [{
-    translate: [3, 3, -5],
-  }],
 };
 
 const getBoxesProps = () => {
@@ -63,9 +54,6 @@ const getPoints = boxes => (
 class Wall extends React.Component {
   state = {
     boxes: getBoxesProps(),
-    soundPlayState: 'pause',
-    explosionPosition: new THREE.Vector3(0, 0, -5),
-    showExplosion: false,
   };
 
   renderBox = (box) => {
@@ -80,8 +68,6 @@ class Wall extends React.Component {
       <VrButton
         key={id}
         onClick={() => this.handleHit(box)}
-        onLongClick={() => this.handleHit(box, weapons.ROCKET)}
-        longClickDelayMS={SPECIAL_WEAPON_DELAY}
       >
         <CustomModel
           source={asset(file || 'box/box.gltf')}
@@ -98,18 +84,9 @@ class Wall extends React.Component {
     );
   }
 
-  finishGame() {
-    this.props.updateFinishedStatus(true);
-
-    this.setState({
-      boxes: getBoxesProps(),
-      soundPlayState: 'pause',
-    });
-  }
-
   handleHit = (box, weapon = weapons.CANNONBALL) => {
     const { id, x, y } = box;
-    const { boxes, explosionPosition } = this.state;
+    const { boxes } = this.state;
 
     NativeModules.ShotBridge.emitShot();
 
@@ -120,75 +97,24 @@ class Wall extends React.Component {
 
     this.setState({
       boxes: updatedBoxes,
-      soundPlayState: 'play',
-      explosionPosition: explosionPosition.clone().set(x, y, -5),
-      showExplosion: true,
     }, () => this.afterHitUpdate(boxesToRemove));
   };
 
   afterHitUpdate = (boxesToRemove) => {
-    const { boxes } = this.state;
-
     this.props.addHit(
       getPoints(boxesToRemove),
       boxesToRemove.length,
     );
-
-    this.setState({
-      showExplosion: false,
-    });
-
-    if (boxes.length === 0) {
-      this.finishGame();
-    }
-  };
-
-  handleSoundEnd = () => {
-    this.setState({
-      soundPlayState: 'stop',
-    });
   };
 
   render() {
-    const { hasFinished } = this.props.player;
-
     const {
       boxes,
-      explosionPosition,
-      showExplosion,
-      soundPlayState,
     } = this.state;
 
     return (
       <View style={this.props.style}>
-        {(!hasFinished) ? (
-          boxes.map(this.renderBox)
-        ) : (
-          <Summary style={SUMMARY_STYLE} />
-        )}
-
-        <Sound
-          autoPlay={false}
-          source={{
-            mp3: asset('box-explosion.mp3'),
-          }}
-          playControl={soundPlayState}
-          onEnded={this.handleSoundEnd}
-        />
-
-        <ParticlePool
-          type='explosion'
-          show={showExplosion}
-          style={{
-            transform: [{
-              translate: [
-                explosionPosition.x - 0.33,
-                explosionPosition.y + 1,
-                explosionPosition.z - 1.33,
-              ],
-            }],
-          }}
-        />
+        {boxes.map(this.renderBox)}
       </View>
     );
   }
