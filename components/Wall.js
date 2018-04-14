@@ -45,8 +45,8 @@ const getBoxesProps = () => {
 
       items.push({
         id: uuid(),
-        x: i * BOX_SIZE * BOX_SCALE,
-        y: j * BOX_SIZE * BOX_SCALE,
+        x: i * BOX_SIZE,
+        y: j * BOX_SIZE,
         points: boxType.points,
         file: boxType.file,
       });
@@ -90,7 +90,7 @@ class Wall extends React.Component {
             transform: [{
               translate: [x, y, 0],
             }, {
-              scale: [0.03, 0.03, 0.03],
+              scale: [BOX_SCALE, BOX_SCALE, BOX_SCALE],
             }],
           }}
         />
@@ -178,14 +178,13 @@ class Wall extends React.Component {
 
         <ParticlePool
           type='explosion'
-          particlePosition={explosionPosition}
           show={showExplosion}
           style={{
             transform: [{
               translate: [
-                explosionPosition.x - 0.25,
-                explosionPosition.y + 0.5,
-                explosionPosition.z - 1,
+                explosionPosition.x - 0.33,
+                explosionPosition.y + 1,
+                explosionPosition.z - 1.33,
               ],
             }],
           }}

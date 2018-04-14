@@ -1,5 +1,4 @@
 import React from 'react';
-import * as THREE from 'three';
 import { View, asset, VrHeadModel, Sound } from 'react-vr';
 
 import { CustomModel } from '../views/CustomModel/component';
@@ -32,8 +31,6 @@ const HUD_STYLE = {
     translate: [-0.5, 0.75, -0.5],
   }],
 };
-
-const PARTICLE_POSITION = new THREE.Vector3();
 
 /* eslint-disable no-nested-ternary */
 const getClamped = value => (
@@ -127,7 +124,6 @@ class Cannon extends React.Component {
 
           <ParticlePool
             type='smoke'
-            particlePosition={PARTICLE_POSITION}
             show={showSmoke}
             style={{
               transform: [{

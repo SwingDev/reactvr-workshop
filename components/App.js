@@ -16,7 +16,7 @@ import Wall from './Wall';
 const WALL_STYLE = {
   transform: [{
     translate: [
-      -WALL_WIDTH + (BOX_SIZE / 2),
+      -WALL_WIDTH + (BOX_SIZE / 2) + 0.25,
       -Y_OFFSET,
       -5,
     ],

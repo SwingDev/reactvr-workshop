@@ -9,7 +9,6 @@ import Stats from 'stats.js';
 
 import ShotBridge from '../modules/ShotBridge';
 
-import RCTHemiLight from '../views/HemiLight';
 import RCTCustomModel from '../views/CustomModel';
 import RCTParticlePool from '../views/ParticlePool';
 
@@ -35,9 +34,6 @@ const init = (bundle, parent, options) => {
     nativeModules: [shotBridge],
     cursorVisibility: 'visible',
     customViews: [{
-      name: 'HemiLight',
-      view: RCTHemiLight,
-    }, {
       name: 'CustomModel',
       view: RCTCustomModel,
     }, {

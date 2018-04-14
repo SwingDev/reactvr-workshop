@@ -1,7 +1,7 @@
 export const Y_OFFSET = 2.5;
 
 export const BOX_SIZE = 2;
-export const BOX_SCALE = 1;
+export const BOX_SCALE = 0.033;
 
 export const WALL_WIDTH = 4;
 export const WALL_HEIGHT = 4;

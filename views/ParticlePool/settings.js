@@ -43,7 +43,7 @@ export default {
     },
   },
   smoke: {
-    poolSize: 2,
+    poolSize: 1,
     settings: {
       texture: {
         value: textureLoader.load(smokeImage),

@@ -23,7 +23,6 @@ export const ParticlePool = createReactClass({
     ...View.propTypes,
     style: StyleSheetPropType(LayoutAndTransformPropTypes),
     type: PropTypes.string,
-    particlePosition: PropTypes.any,
     show: PropTypes.bool,
   },
 

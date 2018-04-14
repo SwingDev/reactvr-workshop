@@ -15,21 +15,12 @@ class RCTParticlePool extends ReactVR.RCTBaseView {
     super();
 
     this.view = new OVRUI.UIView(guiSys);
-    this.position = new THREE.Vector3();
 
     Object.defineProperty(
       this.props,
       'type',
       ({
         set: this.setType,
-      }),
-    );
-
-    Object.defineProperty(
-      this.props,
-      'particlePosition',
-      ({
-        set: this.setParticlePosition,
       }),
     );
 
@@ -57,15 +48,9 @@ class RCTParticlePool extends ReactVR.RCTBaseView {
     }
   };
 
-  setParticlePosition = (value) => {
-    if (value) {
-      this.position = value;
-    }
-  };
-
   setShow = (value) => {
     if (value && this.group) {
-      this.group.triggerPoolEmitter(1, this.position);
+      this.group.triggerPoolEmitter(1);
     }
   };
 
@@ -82,7 +67,6 @@ class RCTParticlePool extends ReactVR.RCTBaseView {
       // declare the native props sent from react to runtime
       NativeProps: {
         type: 'string',
-        particlePosition: 'object',
         show: 'boolean',
       },
     });

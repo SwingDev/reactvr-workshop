@@ -2,6 +2,7 @@ import {
   WALL_WIDTH,
   WALL_HEIGHT,
   weaponConfig,
+  weapons,
   boxTypes,
 } from '../config';
 
@@ -38,7 +39,11 @@ const getBoxesToRemove = (array, startIndex, num = 1) => {
   return output;
 };
 
-export const getUpdatedBoxes = (boxes, removedId, weapon) => {
+export const getUpdatedBoxes = (
+  boxes,
+  removedId,
+  weapon = weapons.CANNONBALL,
+) => {
   const weaponRange = weaponConfig[weapon];
   const startIndex = boxes.findIndex(box => box.id === removedId);
   const boxesToRemove = getBoxesToRemove(boxes, startIndex, weaponRange);
