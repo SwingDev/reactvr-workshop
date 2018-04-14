@@ -1,6 +1,14 @@
 # Cannon Shooter
 Simple Cannon Shooter game built in [React VR][reactvr]
 
+## Stage
+Project setup and building basic scene
+
+- Make Sky component
+- Make Groud component
+- Add Sky and Ground to App.js
+- Add lights
+
 ## Requirements
 - [Node.js][node.js]
 - [Yarn][yarn]
