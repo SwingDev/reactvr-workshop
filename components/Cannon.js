@@ -36,7 +36,7 @@ const HUD_STYLE = {
 const PARTICLE_POSITION = new THREE.Vector3();
 
 /* eslint-disable no-nested-ternary */
-const getDumped = value => (
+const getClamped = value => (
   (value > MAX_ROTATION_DEGREE)
     ? MAX_ROTATION_DEGREE
     : (value < -MAX_ROTATION_DEGREE)
@@ -74,8 +74,8 @@ class Cannon extends React.Component {
     const [x, y] = VrHeadModel.rotation();
 
     this.setState({
-      headRotateX: getDumped(x),
-      headRotateY: getDumped(y),
+      headRotateX: getClamped(x),
+      headRotateY: getClamped(y),
     });
   };
 
@@ -97,7 +97,12 @@ class Cannon extends React.Component {
   };
 
   render() {
-    const { headRotateX, headRotateY, showSmoke } = this.state;
+    const {
+      headRotateX,
+      headRotateY,
+      showSmoke,
+      soundPlayState,
+    } = this.state;
 
     return (
       <View style={this.props.style}>
@@ -143,9 +148,8 @@ class Cannon extends React.Component {
           source={{
             mp3: asset('cannon-shot.mp3'),
           }}
-          playControl={this.state.soundPlayState}
+          playControl={soundPlayState}
           onEnded={this.handleSoundEnd}
-          volume={1}
         />
       </View>
     );

@@ -11,7 +11,7 @@ const Ground = () => (
       transform: [{
         translateY: -Y_OFFSET,
       }, {
-        rotateX: `${-(Math.PI / 2)}rad`,
+        rotateX: -90,
       }],
     }}
     materialParameters={{

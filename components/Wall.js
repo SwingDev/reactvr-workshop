@@ -92,8 +92,6 @@ class Wall extends React.Component {
             }, {
               scale: [0.03, 0.03, 0.03],
             }],
-            position: 'absolute',
-            layoutOrigin: [0.5, 0.5],
           }}
         />
       </VrButton>
@@ -153,7 +151,13 @@ class Wall extends React.Component {
 
   render() {
     const { hasFinished } = this.props.player;
-    const { boxes, explosionPosition, showExplosion } = this.state;
+
+    const {
+      boxes,
+      explosionPosition,
+      showExplosion,
+      soundPlayState,
+    } = this.state;
 
     return (
       <View style={this.props.style}>
@@ -168,7 +172,7 @@ class Wall extends React.Component {
           source={{
             mp3: asset('box-explosion.mp3'),
           }}
-          playControl={this.state.soundPlayState}
+          playControl={soundPlayState}
           onEnded={this.handleSoundEnd}
         />
 
