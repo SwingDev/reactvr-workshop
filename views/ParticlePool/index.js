@@ -8,13 +8,12 @@ import SPE from '../../libs/SPE';
 
 import poolSettings from './settings';
 
-const clock = new THREE.Clock();
-
 class RCTParticlePool extends ReactVR.RCTBaseView {
   constructor(guiSys) {
     super();
 
     this.view = new OVRUI.UIView(guiSys);
+    this.clock = new THREE.Clock();
 
     Object.defineProperty(
       this.props,
@@ -58,7 +57,7 @@ class RCTParticlePool extends ReactVR.RCTBaseView {
     super.frame(...args);
 
     if (this.group) {
-      this.group.tick(clock.getDelta());
+      this.group.tick(this.clock.getDelta());
     }
   }
 
